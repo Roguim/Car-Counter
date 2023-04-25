@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=1920, initial-scale=1.0">
+    <title>Car Counter</title>
+    <link rel="stylesheet" href="css/accessibility.css">
+    <link rel="stylesheet" href="css/stylistic.css">
+    <link rel="stylesheet" href="css/functionality.css">
+
+    <script src="js/carCounter.js" defer></script>
+
+
+    <!-- Import from other sources -->
+    <link rel="stylesheet" href="assets/fontawesome/css/regular.css">
+</head>
+<body>
+    <header>
+        <button class="save" onclick="save()">
+            <i class="fa-regular fa-floppy-disk"></i>
+            <span>Save/Export</span>
+        </button>
+    </header>
+
+    <div class="errorPane">
+        
+    </div>
+
+    <div class="fileScreen">
+        <div class="inputs" ondragover="dragging(event)" ondrop="dropped(event)">
+            <strong>Browse or Drop a File!</strong>
+            <input type="file" id="files" accept=".json">
+            <button onclick="loadFile()">Start</button>
+        </div>
+    </div>
+    <div class="cardContainer">
+<!--        <div class="card">
+            <div class="color" style="background-color:hsl(0, 100%, 50%)">&nbsp;</div>
+            <span class="type">Holden Commodore</span><br>
+            <span class="year">1992</span>
+            <hr>
+            <div class="cardButtons cbCar">
+                <button class="minus">-</button>
+                <input type="number">
+                <button class="plus">+</button>
+        
+                <button class="copy">
+                    <i class="fa-regular fa-copy" aria-hidden="true"></i>
+                    <span class="sr-only">Duplicate Car</span>
+                </button>
+            </div>
+        </div>
+        <div class="card">
+            <div class="color" style="background-color:hsl(0, 100%, 50%)">&nbsp;</div>
+            <span class="type">Holden Commodore</span><br>
+            <span class="year">1999</span>
+            <hr>
+            <div class="cardButtons cbCar">
+                <button class="minus">-</button>
+                <input type="number">
+                <button class="plus">+</button>
+        
+                <button class="copy">
+                    <i class="fa-regular fa-copy" aria-hidden="true"></i>
+                    <span class="sr-only">Duplicate Car</span>
+                </button>
+            </div>
+        </div> -->
+        <button class="new" onclick="newCarForm()">
+            <i class="fa-solid fa-plus"></i>
+            <span class="sr-only">New Car</span>
+        </button>
+    </div>
+
+    <div class="editFormContainer">
+        <div class="editForm">
+            <span style="display: none;" class="editIndex">0</span>
+            <fieldset>
+                <label for="brandInput">Brand:</label>
+                <input type="text" id="brandInput">
+            </fieldset>
+            <fieldset>
+                <label for="modelInput">Car Model:</label>
+                <input type="text" id="modelInput">
+            </fieldset>
+            <fieldset>
+                <label for="colourInput">Colour:</label>
+                <input type="text" id="colourInput"><span class="preview" style="background-color:red">&nbsp;</span>
+            </fieldset>
+            <fieldset>
+                <label for="countInput">Start Count:</label>
+                <input type="text" id="countInput"><br>
+            </fieldset>
+            <button>Create Car!</button>
+            <button onclick="exitCarForm()">Exit</button>
+        </div>
+    </div>
+
+    <div class="deleteWarningContainer">
+        <div class="deleteWarning">
+            <span>
+                <strong>Are you sure </strong> you want to delete <strong id="deleteName"></strong>?
+            </span>
+            <button onclick="deleteConfirm()">Yes</button>
+            <button onclick="deleteCancel()">No</button>
+        </div>
+    </div>
+
+    <div class="saveContainer">
+        <div class="saveBox">
+            <a href="#" download="cars.json">Click here to download your save of the counts!</a>
+            <button onclick="closeSave()">Exit</button>
+        </div>
+    </div>
+</body>
+</html>
