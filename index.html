@@ -17,21 +17,21 @@
 </head>
 <body>
     <header>
-        <button class="save" onclick="save()">
+        <button class="save">
             <i class="fa-regular fa-floppy-disk"></i>
             <span>Save/Export</span>
         </button>
     </header>
 
     <div class="errorPane">
-        
+
     </div>
 
     <div class="fileScreen">
-        <div class="inputs" ondragover="dragging(event)" ondrop="dropped(event)">
+        <div class="inputs">
             <strong>Browse or Drop a File!</strong>
             <input type="file" id="files" accept=".json">
-            <button onclick="loadFile()">Start</button>
+            <button>Start</button>
         </div>
     </div>
     <div class="cardContainer">
@@ -75,7 +75,7 @@
 
     <div class="editFormContainer">
         <div class="editForm">
-            <span style="display: none;" class="editIndex">0</span>
+            <span class="editIndex">0</span>
             <fieldset>
                 <label for="brandInput">Brand:</label>
                 <input type="text" id="brandInput">
@@ -86,14 +86,14 @@
             </fieldset>
             <fieldset>
                 <label for="colourInput">Colour:</label>
-                <input type="text" id="colourInput"><span class="preview" style="background-color:red">&nbsp;</span>
+                <input type="text" id="colourInput"><span class="preview">&nbsp;</span>
             </fieldset>
             <fieldset>
                 <label for="countInput">Start Count:</label>
                 <input type="text" id="countInput"><br>
             </fieldset>
             <button>Create Car!</button>
-            <button onclick="exitCarForm()">Exit</button>
+            <button>Exit</button>
         </div>
     </div>
 
@@ -102,15 +102,15 @@
             <span>
                 <strong>Are you sure </strong> you want to delete <strong id="deleteName"></strong>?
             </span>
-            <button onclick="deleteConfirm()">Yes</button>
-            <button onclick="deleteCancel()">No</button>
+            <button>Yes</button>
+            <button>No</button>
         </div>
     </div>
 
     <div class="saveContainer">
         <div class="saveBox">
             <a href="#" download="cars.json">Click here to download your save of the counts!</a>
-            <button onclick="closeSave()">Exit</button>
+            <button>Exit</button>
         </div>
     </div>
 </body>
