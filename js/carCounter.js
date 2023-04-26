@@ -14,7 +14,18 @@ document.getElementsByClassName('inputs')[0].addEventListener('dragleave', (even
 
 document.getElementById('colourInput').addEventListener('input', (event) => {
     document.getElementsByClassName('preview')[0].style.backgroundColor = event.target.value;
-})
+});
+
+document.getElementsByClassName('inputs')[0].children[2].addEventListener('click', loadFile);
+document.getElementsByClassName('inputs')[0].addEventListener('dragover', dragging);
+document.getElementsByClassName('inputs')[0].addEventListener('drop', dropped);
+document.getElementsByClassName('new')[0].addEventListener('click', newCarForm);
+document.getElementsByClassName('editForm')[0].children[6].addEventListener('click', exitCarForm);
+document.getElementsByClassName('deleteWarning')[0].children[1].addEventListener('click', deleteConfirm);
+document.getElementsByClassName('deleteWarning')[0].children[2].addEventListener('click', deleteCancel);
+document.getElementsByClassName('saveBox')[0].children[1].addEventListener('click', closeSave);
+document.getElementsByClassName('editIndex')[0].style.display = "none";
+document.getElementsByClassName('preview')[0].style.backgroundColor = "red";
 
 function dragging(event) {
     event.preventDefault();
