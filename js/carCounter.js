@@ -26,6 +26,7 @@ document.getElementsByClassName('deleteWarning')[0].children[2].addEventListener
 document.getElementsByClassName('saveBox')[0].children[1].addEventListener('click', closeSave);
 document.getElementsByClassName('editIndex')[0].style.display = "none";
 document.getElementsByClassName('preview')[0].style.backgroundColor = "red";
+document.getElementsByClassName('save')[0].addEventListener("click", save);
 
 function dragging(event) {
     event.preventDefault();
