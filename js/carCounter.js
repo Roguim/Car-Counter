@@ -19,6 +19,7 @@ document.getElementById('colourInput').addEventListener('input', (event) => {
 document.getElementsByClassName('inputs')[0].children[2].addEventListener('click', loadFile);
 document.getElementsByClassName('inputs')[0].addEventListener('dragover', dragging);
 document.getElementsByClassName('inputs')[0].addEventListener('drop', dropped);
+document.getElementsByClassName('inputs')[0].children[4].addEventListener('click', newCounter);
 document.getElementsByClassName('new')[0].addEventListener('click', newCarForm);
 document.getElementsByClassName('editForm')[0].children[6].addEventListener('click', exitCarForm);
 document.getElementsByClassName('deleteWarning')[0].children[1].addEventListener('click', deleteConfirm);
@@ -27,6 +28,11 @@ document.getElementsByClassName('saveBox')[0].children[1].addEventListener('clic
 document.getElementsByClassName('editIndex')[0].style.display = "none";
 document.getElementsByClassName('preview')[0].style.backgroundColor = "red";
 document.getElementsByClassName('save')[0].addEventListener("click", save);
+
+function newCounter() {
+    document.getElementsByClassName('fileScreen')[0].style.display = "none" ;
+    document.getElementsByClassName('cardContainer')[0].style.display = "flex" ;
+}
 
 function dragging(event) {
     event.preventDefault();
