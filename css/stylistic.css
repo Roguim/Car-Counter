@@ -248,18 +248,20 @@ NEW CAR FORM
 .editFormContainer {
     display: none;
     background-color: rgba(0,0,0,0.6);
-    position: absolute;
+    position: fixed;
     top: 0%;
     left: 0%;
     width: 100%;
     height: 100%;
+
+    z-index: 3;
 }
 
 .editForm {
     background-color: slategray;
     width:40%;
     height:40%;
-    position:absolute;
+    position:fixed;
     left:50%;
     top:50%;
     transform: translate(-50%, -50%);
@@ -303,7 +305,7 @@ DELETION
 .deleteWarningContainer {
     background-color: rgba(0,0,0,0.7);
 
-    position: absolute;
+    position: fixed;
     left: 0px;
     top: 0px;
     
@@ -311,6 +313,7 @@ DELETION
     height: 100%;
 
     display: none;
+    z-index: 3;
 }
 
 .deleteWarning {
@@ -322,7 +325,7 @@ DELETION
     height: 40%;
     padding: 5%;
 
-    position: absolute;
+    position: relative;
     top: 50%;
     left: 50%;
     
@@ -371,9 +374,11 @@ header {
     width: 100%;
     height: 100%;
 
-    position: absolute;
+    position: fixed;
     top: 0px;
     left: 0px;
+    
+    z-index: 3;
 }
 
 .saveBox {
@@ -386,7 +391,7 @@ header {
     top: 50%;
     transform: translate(-50%, -50%);
 
-    position: absolute;
+    position: relative;
 
     font-size: xxx-large;
 
