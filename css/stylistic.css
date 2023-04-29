@@ -349,6 +349,7 @@ HEADER & ITS PARTS
 ****/
 
 header {
+    display: none;
     background-color: darkgray;
     width: calc(100% - 1vh);
     position: sticky;
@@ -357,6 +358,19 @@ header {
     padding-top: 1vh;
     padding-bottom: 1vh;
     padding-left: 1vh;
+
+    z-index: 2;
+}
+
+#countMessage {
+    position: absolute;
+    right: 1%;
+    top: 50%;
+    font-family: sans-serif;
+
+    transform: translateY(-50%);
+
+    font-size: xx-large;
 }
 
 .save {
