@@ -429,7 +429,7 @@ header {
     font-size: xx-large;
 }
 
-.tabList {
+#tabList {
     display:flex;
     flex-direction: row;
     align-content: start;
@@ -466,4 +466,8 @@ header {
     left: 50%;
     
     transform: translateX(-50%);
+}
+
+.card.hidden {
+    display: none;
 }
