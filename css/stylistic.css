@@ -44,6 +44,8 @@
     font-size: xx-large;
     background-color: lightgray;
     border: none;
+
+    pointer-events: all;
 }
 
 .errorStrip {
@@ -371,6 +373,9 @@ header {
     transform: translateY(-50%);
 
     font-size: xx-large;
+
+    width: 12vw;
+    text-align: right;
 }
 
 .save {
@@ -378,6 +383,7 @@ header {
     font-size: xx-large;
     background-color:powderblue;
     padding: 0.5vw;
+    width: 15vw;
 }
 
 .saveContainer {
@@ -421,4 +427,47 @@ header {
 
 .saveBox button {
     font-size: xx-large;
+}
+
+#tabList {
+    display:flex;
+    flex-direction: row;
+    align-content: start;
+    align-items: center;
+    width: 70vw;
+    overflow-y: scroll;
+    flex-wrap: wrap;
+    height: 3.5vw;
+}
+
+.tab {
+    flex-grow: 1;
+    min-width: 5vw;
+    height: 3.5vw;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    align-self: center;
+    position: relative;
+
+    background-color: #777;
+
+    margin-left: 0.5vw;
+    margin-right: 0.5vw;
+}
+
+.tab.selected {
+    background-color: #ccc;
+}
+
+.tab span {
+    position: absolute;
+
+    left: 50%;
+    
+    transform: translateX(-50%);
+}
+
+.card.hidden {
+    display: none;
 }

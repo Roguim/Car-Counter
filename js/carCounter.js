@@ -5,6 +5,9 @@ let XMLContents = "";
 
 const refreshFrequency = 5000;
 
+const tabRefreshFrequency = 7500;
+let tabs = [];
+
 
 document.getElementsByClassName('inputs')[0].addEventListener('dragenter', (event) => {
     event.originalTarget.classList.add('hovered');
@@ -36,18 +39,97 @@ function updateCounts() {
 
     let count = 0;
     for (i = 0; i < cards.length; i++) {
+        if(cards[i].classList.contains("hidden")) continue;
         count += Number.parseInt(cards[i].children[3].children[1].value);
     }
     document.getElementById('totalCount').innerHTML = "";
     document.getElementById('totalCount').append(document.createTextNode(count));
 }
 
+function updateTabs(brandName, action) {
+    let filteredBrand = brandName.replace(/ /g, "-");
+    switch (action) {
+        case "add":
+            if(!tabs.includes(filteredBrand)) {
+                tabs.push(filteredBrand);
+
+                let tabButton = document.createElement("div");
+                tabButton.classList.add("tab");
+                tabButton.innerHTML = `<span>${brandName}</span>`;
+                tabButton.setAttribute("forBrand", filteredBrand);
+
+                if(brandName === "All") {
+                    tabButton.classList.add("selected");
+                }
+
+                tabButton.addEventListener("click", selectTab);
+
+                document.getElementById('tabList').append(tabButton);
+            }
+            break;
+        case "remove":
+            let cars = document.getElementsByClassName(filteredBrand);
+
+            if(cars.length == 1) {
+                let index = tabs.indexOf(filteredBrand);
+
+                document.getElementById('tabList').children[index].remove();
+
+                if(tabs.length == (index + 1)) {
+                    tabs.pop();
+                } else if (index == 0) {
+                    tabs.reverse();
+                    tabs.pop();
+                    tabs.reverse(); 
+                } else {
+                    let arr1 = tabs.slice(index+1);
+                    tabs.reverse();
+                    let arr2 = tabs.slice((-1 * index));
+                    tabs = arr1.push(arr2);
+                }
+            }
+            break;
+    }
+    
+}
+
+function selectTab(elem) {
+    let brand = this.innerText;
+
+    if (document.getElementsByClassName('selected').length > 0) document.getElementsByClassName('selected')[0].classList.remove("selected");
+    this.classList.add("selected");
+
+    let cards = document.getElementsByClassName('card');
+
+    if(brand === "All") {
+        for (i = 0; i < cards.length; i++) {
+            cards[i].classList.remove("hidden");
+        }
+    } else {
+        for (i = 0; i < cards.length; i++) {
+            cards[i].classList.add("hidden");
+        }
+
+        let carCards = document.getElementsByClassName(brand.replace(/ /g, "-"));
+
+        for (i = 0; i < carCards.length; i++) {
+            carCards[i].classList.remove("hidden");
+        }
+    }
+
+    updateCounts();
+}
+
+
 function newCounter() {
     document.getElementsByClassName('fileScreen')[0].style.display = "none" ;
     document.getElementsByClassName('cardContainer')[0].style.display = "flex" ;
-    document.getElementsByTagName('header')[0].style.display = "block" ;
+    document.getElementsByTagName('header')[0].style.display = "flex" ;
 
-    updateCounts()
+    document.getElementById('tabList').innerHTML = "";
+    updateTabs("All", "add");
+
+    updateCounts();
     window.setInterval(updateCounts, refreshFrequency);
 }
 
@@ -67,8 +149,6 @@ function dropped(ev) {
             if (item.kind === "file") {
                 const file = item.getAsFile();
                 parseFile(file);
-            } else {
-                console.log(item);
             }
         }
     }
@@ -98,9 +178,9 @@ function parseFile(file) {
     
     fs.read().then(function processText(contents) {
         if (contents.done) {
-            console.log("done");
+//            console.log("done");
             doneLoading = true;
-            console.log(XMLContents);
+//            console.log(XMLContents);
             createCards(XMLContents);
             return;
         }
@@ -121,9 +201,12 @@ function createCards(file) {
     if(!doneLoading) return false;
     try {
         let json = JSON.parse(file);
-        console.log(json);
+//        console.log(json);
 
         let cars = Object.values(json)[0];
+
+        document.getElementById('tabList').innerHTML = "";
+        updateTabs("All", "add");
 
         cars.forEach((carObj) => {
 
@@ -152,13 +235,13 @@ function createCards(file) {
              */
             let counts = Object.entries(carObj["counts"]);
 
-            console.log(counts);
+            //console.log(counts);
 
             counts.forEach((colourElem) => {
                 newCarObj(carObj["brand"], carObj["type"], colourElem[1], colourElem[0]);
             })
             
-            console.log(carObj);
+            //console.log(carObj);
         });
 
         document.getElementsByClassName('fileScreen')[0].style.display = "none";
@@ -226,7 +309,7 @@ function createCar(event) {
 }
 
 function editCarForm(event) {
-    console.log(event.target);
+    //console.log(event.target);
     document.getElementsByClassName('editFormContainer')[0].style.display = "flex";
     let children = document.getElementsByClassName('editForm')[0].children.length;
     let button = document.getElementsByClassName('editForm')[0].children[children - 2];
@@ -246,7 +329,7 @@ function editCarForm(event) {
         }
     }
 
-    console.log(index);
+    //console.log(index);
     document.getElementsByClassName('editIndex')[0].innerHTML = index;
     document.getElementsByClassName('editForm')[0].children[1].children[1].value = document.getElementsByClassName('brand')[index - 1].innerHTML;
     document.getElementsByClassName('editForm')[0].children[2].children[1].value = document.getElementsByClassName('type')[index - 1].innerHTML;
@@ -255,7 +338,7 @@ function editCarForm(event) {
 
 
     document.getElementsByClassName('preview')[0].style.backgroundColor = document.getElementById('colourInput').value;
-    console.log(event);
+    //console.log(event);
 }
 
 function exitCarForm() {
@@ -284,7 +367,11 @@ function deleteInit(event) {
 function deleteConfirm() {
     let deletionIndex = Number.parseInt(document.getElementsByClassName('deleteWarningContainer')[0].getAttribute('for'));
 
+    let brand = document.getElementsByClassName('brand')[deletionIndex - 1];
+
+    updateTabs(brand.innerText, "remove");
     document.getElementsByClassName('cardContainer')[0].children[deletionIndex].remove();
+
 
     deleteCancel();
 }
@@ -315,6 +402,12 @@ function newCarObj(brandName, typeName, number, colour) {
     let brand = document.createElement('span');
     brand.classList.add("brand");
     brand.append(document.createTextNode(brandName));
+
+    let safeBrand = brand.innerText;
+
+    card.classList.add(safeBrand.replace(/ /g, "-"));
+    updateTabs(safeBrand, "add");
+
     let type = document.createElement('span');
     type.classList.add("type");
     type.append(document.createTextNode(typeName));
@@ -369,7 +462,7 @@ function newCarObj(brandName, typeName, number, colour) {
 
         document.getElementsByClassName('cardContainer')[0].append(newCard);
 
-        console.log(card);
+        //console.log(card);
     });
     cardButtons.append(copyButton);
 
@@ -406,8 +499,19 @@ function editCar() {
     let index = document.getElementsByClassName('editIndex')[0].innerHTML;
 
     let brand = document.createTextNode(document.getElementById('brandInput').value);
+
+    let oldBrand = document.getElementsByClassName('brand')[index - 1].innerText
+    updateTabs(oldBrand, "remove");
+    document.getElementsByClassName('card')[index - 1].classList.remove(oldBrand);
+
     document.getElementsByClassName('brand')[index - 1].innerHTML = "";
     document.getElementsByClassName('brand')[index - 1].append(brand);
+    
+    let safeBrand = document.getElementById('brandInput').value;
+    
+    updateTabs(safeBrand, "add");
+    document.getElementsByClassName('card')[index - 1].classList.add(safeBrand.replace(/ /g, "-"));
+
     let type = document.createTextNode(document.getElementById('modelInput').value);
     document.getElementsByClassName('type')[index - 1].innerHTML = "";
     document.getElementsByClassName('type')[index - 1].append(type);
@@ -446,7 +550,7 @@ function save() {
 
     let cards = document.getElementsByClassName('card');
     for (i = 0; i < cards.length; i++) {
-        console.log(i);
+        //console.log(i);
         let name = `${cards[i].children[1].children[0].innerHTML} ${cards[i].children[1].children[1].innerHTML}`;
         let colour = cards[i].children[0].style.backgroundColor;
         let count = cards[i].children[3].children[1].value;
@@ -476,9 +580,9 @@ function save() {
         content["cars"].push(restructured);
     })
 
-    console.log(content);
+    //console.log(content);
 
-    console.log(cars);
+    //console.log(cars);
 
     let file = new Blob([JSON.stringify(content)],{type: 'text/json'});
     document.getElementsByClassName('saveBox')[0].children[0].href = URL.createObjectURL(file);
