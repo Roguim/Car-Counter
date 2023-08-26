@@ -462,7 +462,8 @@ header {
 
 .tab span {
     position: absolute;
-
+    font-size: xx-large;
+    
     left: 50%;
     
     transform: translateX(-50%);
