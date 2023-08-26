@@ -5,6 +5,7 @@ let XMLContents = "";
 
 const refreshFrequency = 5000;
 
+const tabRefreshFrequency = 7500;
 
 document.getElementsByClassName('inputs')[0].addEventListener('dragenter', (event) => {
     event.originalTarget.classList.add('hovered');
@@ -42,12 +43,21 @@ function updateCounts() {
     document.getElementById('totalCount').append(document.createTextNode(count));
 }
 
+function updateTabs() {
+    let cards = document.getElementsByClassName('card');
+
+    let count = 0;
+    for (i = 0; i < cards.length; i++) {
+        count += Number.parseInt(cards[i].children[3].children[1].value);
+    }
+}
+
 function newCounter() {
     document.getElementsByClassName('fileScreen')[0].style.display = "none" ;
     document.getElementsByClassName('cardContainer')[0].style.display = "flex" ;
-    document.getElementsByTagName('header')[0].style.display = "block" ;
+    document.getElementsByTagName('header')[0].style.display = "flex" ;
 
-    updateCounts()
+    updateCounts();
     window.setInterval(updateCounts, refreshFrequency);
 }
 
