@@ -5,7 +5,8 @@ let XMLContents = "";
 
 const refreshFrequency = 5000;
 
-const tabRefreshFrequency = 7500;
+let tabs = [];
+
 
 document.getElementsByClassName('inputs')[0].addEventListener('dragenter', (event) => {
     event.originalTarget.classList.add('hovered');
@@ -37,25 +38,96 @@ function updateCounts() {
 
     let count = 0;
     for (i = 0; i < cards.length; i++) {
+        if(cards[i].classList.contains("hidden")) continue;
         count += Number.parseInt(cards[i].children[3].children[1].value);
     }
     document.getElementById('totalCount').innerHTML = "";
     document.getElementById('totalCount').append(document.createTextNode(count));
 }
 
-function updateTabs() {
+function updateTabs(brandName, action) {
+    switch (action) {
+        case "add":
+            if(!tabs.includes(brandName)) {
+                tabs.push(brandName);
+
+                let tabButton = document.createElement("div");
+                tabButton.classList.add("tab");
+                tabButton.innerHTML = `<span>${brandName}</span>`;
+
+                if(brandName === "All") {
+                    tabButton.classList.add("selected");
+                }
+
+                tabButton.addEventListener("click", selectTab);
+
+                document.getElementById('tabList').append(tabButton);
+            }
+            break;
+        case "remove":
+            console.log(brandName);
+            let cars = document.getElementsByClassName(brandName);
+
+            if(cars.length == 1) {
+                let index = tabs.indexOf(brandName);
+
+                console.log(document.getElementById('tabList').children[index]);
+                document.getElementById('tabList').children[index].remove();
+
+                if(tabs.length == (index + 1)) {
+                    tabs.pop();
+                } else if (index == 0) {
+                    tabs.reverse();
+                    tabs.pop();
+                    tabs.reverse(); 
+                } else {
+                    let arr1 = tabs.slice(index+1);
+                    tabs.reverse();
+                    let arr2 = tabs.slice((-1 * index));
+                    tabs = arr1.push(arr2);
+                    console.log(tabs);
+                }
+            }
+            break;
+    }
+    
+}
+
+function selectTab(elem) {
+    let brand = this.innerText;
+
+    if (document.getElementsByClassName('selected').length > 0) document.getElementsByClassName('selected')[0].classList.remove("selected");
+    this.classList.add("selected");
+
     let cards = document.getElementsByClassName('card');
 
-    let count = 0;
-    for (i = 0; i < cards.length; i++) {
-        count += Number.parseInt(cards[i].children[3].children[1].value);
+    if(brand === "All") {
+        for (i = 0; i < cards.length; i++) {
+            cards[i].classList.remove("hidden");
+        }
+    } else {
+        for (i = 0; i < cards.length; i++) {
+            cards[i].classList.add("hidden");
+        }
+
+        let carCards = document.getElementsByClassName(brand);
+
+        for (i = 0; i < carCards.length; i++) {
+            carCards[i].classList.remove("hidden");
+        }
     }
+
+    updateCounts();
 }
+
 
 function newCounter() {
     document.getElementsByClassName('fileScreen')[0].style.display = "none" ;
     document.getElementsByClassName('cardContainer')[0].style.display = "flex" ;
     document.getElementsByTagName('header')[0].style.display = "flex" ;
+
+    document.getElementById('tabList').innerHTML = "";
+    updateTabs("All", "add");
 
     updateCounts();
     window.setInterval(updateCounts, refreshFrequency);
@@ -174,6 +246,9 @@ function createCards(file) {
         document.getElementsByClassName('fileScreen')[0].style.display = "none";
         document.getElementsByClassName('cardContainer')[0].style.display = "flex";
         document.getElementsByTagName('header')[0].style.display = "block" ;
+
+        document.getElementById('tabList').innerHTML = "";
+        updateTabs("All", "add");
 
         updateCounts()
         window.setInterval(updateCounts, refreshFrequency);
@@ -294,7 +369,11 @@ function deleteInit(event) {
 function deleteConfirm() {
     let deletionIndex = Number.parseInt(document.getElementsByClassName('deleteWarningContainer')[0].getAttribute('for'));
 
+    let brand = document.getElementsByClassName('brand')[deletionIndex - 1];
+
+    updateTabs(brand.innerText, "remove");
     document.getElementsByClassName('cardContainer')[0].children[deletionIndex].remove();
+
 
     deleteCancel();
 }
@@ -325,6 +404,13 @@ function newCarObj(brandName, typeName, number, colour) {
     let brand = document.createElement('span');
     brand.classList.add("brand");
     brand.append(document.createTextNode(brandName));
+
+    let safeBrand = brand.innerText;
+
+    card.classList.add(safeBrand);
+    console.log(card);
+    updateTabs(safeBrand, "add");
+
     let type = document.createElement('span');
     type.classList.add("type");
     type.append(document.createTextNode(typeName));
@@ -416,8 +502,19 @@ function editCar() {
     let index = document.getElementsByClassName('editIndex')[0].innerHTML;
 
     let brand = document.createTextNode(document.getElementById('brandInput').value);
+
+    let oldBrand = document.getElementsByClassName('brand')[index - 1].innerText
+    updateTabs(oldBrand, "remove");
+    document.getElementsByClassName('card')[index - 1].classList.remove(oldBrand);
+
     document.getElementsByClassName('brand')[index - 1].innerHTML = "";
     document.getElementsByClassName('brand')[index - 1].append(brand);
+    
+    let safeBrand = document.getElementById('brandInput').value;
+    
+    updateTabs(safeBrand, "add");
+    document.getElementsByClassName('card')[index - 1].classList.add(safeBrand);
+
     let type = document.createTextNode(document.getElementById('modelInput').value);
     document.getElementsByClassName('type')[index - 1].innerHTML = "";
     document.getElementsByClassName('type')[index - 1].append(type);
